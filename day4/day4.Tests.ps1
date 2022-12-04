@@ -26,7 +26,6 @@ Describe "ParseSection" {
 
 Describe "SectionInOtherSection" {
   It "Checks to see if a section is contained in a bigger section." {
-
     SectionInOtherSection (ParseSection "2-4") (ParseSection "6-8") | Should -be 0
     SectionInOtherSection (ParseSection "2-8") (ParseSection "3-7") | Should -be 1
     SectionInOtherSection (ParseSection "6-6") (ParseSection "4-6") | Should -be 1
@@ -37,5 +36,22 @@ Describe "FindAllSectionsForReconsideration" {
   It "Finds all section contained within a bigger section." {
     $sectionAssigments = Parse $inputText
     FindAllSectionsForReconsideration $sectionAssigments | Should -be 2
+  }
+}
+
+Describe "IntersectingSectionAreas" {
+  It "Finds intersecting areas in the sections" {
+    IntersectingSectionAreas (ParseSection "2-4") (ParseSection "6-8") | Should -be 0
+    IntersectingSectionAreas (ParseSection "2-8") (ParseSection "3-7") | Should -be 1
+    IntersectingSectionAreas (ParseSection "6-6") (ParseSection "4-6") | Should -be 1
+    IntersectingSectionAreas (ParseSection "5-7") (ParseSection "7-9") | Should -be 1
+    IntersectingSectionAreas (ParseSection "2-6") (ParseSection "4-8") | Should -be 1
+  }
+}
+
+Describe "FindAllIntersectingSections" {
+  It "Finds all sections that are intersecting in part or wholly." {
+    $sectionAssigments = Parse $inputText
+    FindAllIntersectingSections $sectionAssigments | Should -be 4
   }
 }

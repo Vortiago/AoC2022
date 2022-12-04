@@ -27,3 +27,24 @@ function Parse($textInput) {
   $stringSplitOptions = [System.StringSplitOptions]::RemoveEmptyEntries
   return $textInput.Split([System.Environment]::NewLine, $stringSplitOptions)
 }
+
+function IntersectingSectionAreas($sectionA, $sectionB) {
+  $zoneA = $sectionA[0]..$sectionA[1]
+  $zoneB = $sectionB[0]..$sectionB[1]
+
+  if ($zoneA | Where-Object{$zoneB -contains $_ }) {
+    return 1
+  }
+
+  return 0
+}
+
+function FindAllIntersectingSections($sectionAssigments) {
+  $sum = 0
+  foreach ($sectionAssigment in $sectionAssigments) {
+    $sections = $sectionAssigment.Split(",")
+    $sum += IntersectingSectionAreas (ParseSection $sections[0]) (ParseSection $sections[1])
+  }
+
+  return $sum
+}

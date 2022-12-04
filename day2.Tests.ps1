@@ -63,3 +63,17 @@ Describe "PlayGame" {
     PlayGame $inputText | Should -be 15
   }
 }
+
+Describe "PlayPart2Game" {
+  It "Part two is different, should return other value" {
+    PlayPart2Game $inputText | Should -be 12
+  }
+}
+
+Describe "CheckGameRoundPart2" {
+  It "Should be checked that the rule examples work." {
+    CheckGameRoundPart2 "A" "Y" | Should -be 4
+    CheckGameRoundPart2 "B" "X" | Should -be 1
+    CheckGameRoundPart2 "C" "Z" | Should -be 7
+  }
+}

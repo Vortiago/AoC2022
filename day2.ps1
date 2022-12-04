@@ -23,16 +23,35 @@ public enum PossibleResults
 # B, Y > A, X
 # C, Z > B, Y
 
+# X = Loose
+# Y = Tie
+# Z = Win
+
 function GetHandValue($right) {
   $score = 0
   switch ($right) {
     "X" { $score = [int][HandValues]::Rock }
     "Y" { $score = [int][HandValues]::Paper }
     "Z" { $score = [int][HandValues]::Scissor }
+    "A" { $score = [int][HandValues]::Rock }
+    "B" { $score = [int][HandValues]::Paper }
+    "C" { $score = [int][HandValues]::Scissor }
     Default {}
   }
 
   return $score
+}
+
+$winTable = @{
+  "A" = [HandValues]::Paper;
+  "B" = [HandValues]::Scissor;
+  "C" = [HandValues]::Rock
+}
+
+$looseTable = @{
+  "A" = [HandValues]::Scissor;
+  "B" = [HandValues]::Rock;
+  "C" = [HandValues]::Paper
 }
 
 function CheckGameRound($left, $right) {
@@ -50,6 +69,24 @@ function CheckGameRound($left, $right) {
     $score += [int][PossibleResults]::Tie
   } elseif ($right -eq "Z" -and $left -eq "B") {
     $score += [int][PossibleResults]::Win
+  }
+
+  return $score
+}
+
+function CheckGameRoundPart2($left, $right) {
+  $score = 0
+  switch ($right) {
+    "X" { $score += $looseTable[$left] }
+    "Y" {
+      $score += [PossibleResults]::Tie 
+      $score += GetHandValue $left
+    }
+    "Z" {
+      $score += [PossibleResults]::Win 
+      $score += $winTable[$left] 
+    }
+    Default {}
   }
 
   return $score
@@ -74,5 +111,16 @@ function PlayGame($rounds) {
   return $sum
 }
 
+function PlayPart2Game($rounds) {
+  $sum = 0
+  foreach ($round in (Parse $rounds)) {
+    $hands = ParseRound $round
+    $sum += CheckGameRoundPart2 $hands[0] $hands[1]
+  }
+
+  return $sum
+}
+
 $dayInput = Get-Content -Raw "day2.input.txt"
 Write-Host (PlayGame $dayInput)
+Write-Host (PlayPart2Game $dayInput)

@@ -15,6 +15,7 @@ BeforeAll {
 9000
 
 10000"
+  $elves
 }
 
 Describe "MostCalories" {

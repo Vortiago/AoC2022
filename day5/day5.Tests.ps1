@@ -77,8 +77,8 @@ Describe "RunCommand" {
     $stacks = ParseInitialState $inputText
     $cmd = ParseCommands "move 1 from 2 to 1"
     $stacks = RunCommand $cmd $stacks
-    $stacks["2"].Pop() | Should -be "M"
-    $stacks["1"].Pop() | Should -be "C"
+    $stacks["2"].Pop() | Should -be "C"
+    $stacks["1"].Pop() | Should -be "D"
   }
 }
 

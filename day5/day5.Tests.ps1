@@ -25,8 +25,8 @@ Describe "ParseInitialState" {
   It "Should parse the input and create the initial state of stacks." {
     $stacks = ParseInitialState $inputText
     $stacks.Count | Should -be 3
-    $stacks["1"].Pop() | Should -be "D"
-    $stacks["2"].Pop() | Should -be "C"
+    $stacks["1"].Pop() | Should -be "N"
+    $stacks["2"].Pop() | Should -be "D"
     $stacks["3"].Pop() | Should -be "P"
   }
 }

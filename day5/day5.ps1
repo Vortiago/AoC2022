@@ -52,7 +52,7 @@ function RunCommand($cmd, $stacks) {
     $crane = $stacks[$cmd[1]].Pop()
     $stacks[$cmd[2]].Push($crane)
   }
-  
+
   return $stacks
 }
 
@@ -76,4 +76,39 @@ function PartOneSolution($inputText) {
   }
 
   return $solution
+}
+
+function PartTwoSolution($inputText) {
+  $stacks = RunCrateMover9001 $inputText
+  $solution = ""
+  for($stack=1; $stack -le $stacks.Count; $stack++) {
+    $solution += $stacks[[string]$stack].Pop()
+  }
+
+  return $solution
+}
+
+function RunCrateMover9001($inputText) {
+  $initialParse = ParseSplitInTwo $inputText
+  $stacks = ParseInitialState $inputText
+  $commands = $initialParse[1].Trim().Split([System.Environment]::NewLine)
+  foreach($command in $commands) {
+    $parsedCommands = ParseCommands $command
+    $stacks = RunCrateMover9001Command $parsedCommands $stacks
+  }
+
+  return $stacks
+}
+
+function RunCrateMover9001Command($cmd, $stacks) {
+  $crane = New-Object System.Collections.Generic.List[String]
+  for($crate = 0; $crate -lt $cmd[0]; $crate++) {
+    $crane.Add($stacks[$cmd[1]].Pop())
+  }
+  $crane.Reverse()
+  foreach($crate in $crane) {
+    $stacks[$cmd[2]].Push($crate)
+  }
+
+  return $stacks
 }

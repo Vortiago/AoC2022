@@ -97,8 +97,8 @@ Describe "PartOneSolution" {
   }
 }
 
-Describe "PartTwoSOlution" {
+Describe "PartTwoSolution" {
   It "Should print the CrateMover 9001 solution." {
-    
+    PartTwoSolution $inputText | Should -be "MCD"
   }
 }

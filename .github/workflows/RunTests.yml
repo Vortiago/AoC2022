@@ -26,3 +26,9 @@ jobs:
       - name: Run Pester
         shell: pwsh
         run: Invoke-Pester -CI
+      
+      - name: Upload test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: AoC Test Results
+          path: testResults.xml

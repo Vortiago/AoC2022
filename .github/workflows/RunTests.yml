@@ -28,7 +28,7 @@ jobs:
         run: Invoke-Pester -CI
       
       - name: Upload test results
-        uses: actions/upload-artifact@v3
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
         with:
-          name: AoC Test Results
-          path: testResults.xml
+          nunit_files: "testResults.xml"

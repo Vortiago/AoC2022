@@ -29,7 +29,7 @@ function SortBySumCalories($inputArray, [ref]$sortedArray) {
   $sortedArray.Value = $tmpArray | Sort-Object -Descending
 }
 
-$dayInput = Get-Content -Raw "day1.input.txt"
+$dayInput = Get-Content -Raw "$PSScriptRoot/day1.input.txt"
 [System.Collections.ArrayList]$outputArray= @()
 Parse -inputText $dayInput -outputArray ([ref]$outputArray)
 $mostCalories = 0

@@ -121,6 +121,6 @@ function PlayPart2Game($rounds) {
   return $sum
 }
 
-$dayInput = Get-Content -Raw "day2.input.txt"
+$dayInput = Get-Content -Raw "$PSScriptRoot/day2.input.txt"
 Write-Host (PlayGame $dayInput)
 Write-Host (PlayPart2Game $dayInput)

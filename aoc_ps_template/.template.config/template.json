@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Atle",
+  "classifications": [ "Console" ], 
+  "name": "Advent of Code - Powershell",
+  "identity": "AdventOfCode.Day.Powershell",         
+  "groupIdentity":"AdventOfCode",
+  "shortName": "aocps",
+  "tags": {
+    "language": "Powershell",
+    "type":"project"
+  },
+  "sourceName": "day"
+}

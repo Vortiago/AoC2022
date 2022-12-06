@@ -22,3 +22,13 @@ Describe "FindPositionAfterMarker" {
     FindPositionAfterMarker "zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw" | Should -be 11
   }
 }
+
+Describe "FindPositionAfterMarker" {
+  It "Should return the position after the message marker is found." {
+    FindPositionAfterMarker $inputText 14 | Should -be 19
+    FindPositionAfterMarker "bvwbjplbgvbhsrlpgdmjqwftvncz" 14 | Should -be 23
+    FindPositionAfterMarker "nppdvjthqldpwncqszvftbrmjlhg" 14 | Should -be 23
+    FindPositionAfterMarker "nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg" 14 | Should -be 29
+    FindPositionAfterMarker "zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw" 14 | Should -be 26
+  }
+}

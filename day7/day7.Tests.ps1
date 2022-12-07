@@ -103,6 +103,19 @@ Describe "SolvePartOne" {
   }
 }
 
+Describe "FindSmallestDirectoryAboveASize" {
+  It "Should return the directory that is big enough to free enough space" {
+    $rootFolder = ProcessHistory $inputText
+    FindSmallestDirectoryAboveASize $rootFolder.FlatFolderList $rootFolder.RootFolder.Size | Should -be 24933642
+  }
+}
+
+Describe "SolvePartTwo" {
+  It "Should give you the size of the smallest folder to be deleted." {
+    SolvePartTwo $inputText | Should -be 24933642
+  }
+}
+
 AfterAll {
   Remove-Module day7
 }

@@ -128,3 +128,14 @@ function SolvePartOne($inputText) {
   $rootFolder = ProcessHistory $inputText
   return SumFoldersWithAtMostXSize $rootFolder.FlatFolderList
 }
+
+function FindSmallestDirectoryAboveASize($flatFolderList, $rootFileSize) {
+  $breakpointSize = 30000000- (70000000 - $rootFileSize)
+  return ($flatFolderList.Where({$_.Size -ge $breakpointSize}).Size | Measure-Object -Minimum).Minimum
+}
+
+function SolvePartTwo($inputText) {
+  $rootFolder = ProcessHistory $inputText
+  FindSmallestDirectoryAboveASize $rootFolder.FlatFolderList $rootFolder.RootFolder.Size
+  
+}

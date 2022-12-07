@@ -5,8 +5,8 @@ $dayInput = Get-Content -Raw "$PSScriptRoot/day1.input.txt"
 Parse -inputText $dayInput -outputArray ([ref]$outputArray)
 $mostCalories = 0
 MostCalories -inputArray $outputArray -sumMostCalories ([ref]$mostCalories)
-Write-Host $mostCalories
+Write-Output $mostCalories
 
 [System.Collections.ArrayList]$sortedArray= @()
 SortBySumCalories -inputArray $outputArray -sortedArray ([ref]$sortedArray)
-Write-Host ($sortedArray[0] + $sortedArray[1] + $sortedArray[2])
+Write-Output ($sortedArray[0] + $sortedArray[1] + $sortedArray[2])

@@ -1,5 +1,5 @@
 . $PSScriptRoot/day4.ps1
 
 $dayInput = Parse (Get-Content -Raw "day4.input.txt")
-Write-Host (FindAllSectionsForReconsideration $dayInput)
-Write-Host (FindAllIntersectingSections $dayInput)
+Write-Output (FindAllSectionsForReconsideration $dayInput)
+Write-Output (FindAllIntersectingSections $dayInput)

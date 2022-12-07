@@ -2,5 +2,5 @@
 
 [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("UseDeclaredVarsMoreThanAssignments", "")]
 $day6Input = Get-Content -Raw "day6.input.txt"
-Write-Host (FindPositionAfterMarker $day6Input)
-Write-Host (FindPositionAfterMarker $day6Input 14)
+Write-Output (FindPositionAfterMarker $day6Input)
+Write-Output (FindPositionAfterMarker $day6Input 14)

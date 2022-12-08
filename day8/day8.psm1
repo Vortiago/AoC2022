@@ -75,7 +75,7 @@ function CheckVisibility($forest) {
     }
   }
 
-  #Top side
+  #Bottom side
   for ($column = 0; $column -lt $forest.Rows[0].Count ; $column++) {
     $maxHeightSoFar = -1
     for ($row = $forest.Rows.Count-1; $row -ge 0 ; $row--) {

@@ -25,10 +25,16 @@ jobs:
       # Runs a single command using the runners shell
       - name: Run Pester
         shell: pwsh
-        run: Invoke-Pester -CI
+        run: |
+          $configuration = New-PesterConfiguration
+          $configuration.TestResult.Enabled = $true
+          $configuration.TestResult.OutputFormat = "JUnitXml"
+          Invoke-Pester -Configuration $configuration
       
       - name: Upload test results
-        uses: EnricoMi/publish-unit-test-result-action@v2
-        if: always()
+        uses: dorny/test-reporter@v1
+        if: always()   # run this step even if previous step failed
         with:
-          nunit_files: "testResults.xml"
+          name: Powershell Pester Tests
+          path: testResults.xml
+          reporter: java-junit

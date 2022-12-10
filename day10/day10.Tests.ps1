@@ -153,9 +153,10 @@ noop"
 Describe "[CPU]::Noop" {
   It "Should make no changes to cycles or X registry" {
     $cpu = CreateCPU
-    $cpu.Noop()
-    $cpu.Cycles | Should -be 0
-    $cpu.RegistryX | Should -be 0
+    $cpu.LoadProgram("noop")
+    $cpu.Run()
+    $cpu.Cycles | Should -be 1
+    $cpu.RegistryX | Should -be 1
   }
 }
 
@@ -171,26 +172,38 @@ Describe "[CPU]::AddX" {
     )
 
     $cpu = CreateCPU
-    $cpu.AddX($Value)
+    $cpu.LoadProgram("addx " + $Value)
+    $cpu.Run()
     $cpu.Cycles | Should -be 2
-    $cpu.RegistryX | Should -be $Value
+    $cpu.RegistryX | Should -be (1 + $Value)
   }
 }
 
 Describe "ParseInstruction" {
-  It "Should parse a line and return instruction" `
+  It "Should parse addx line and return instruction" `
   -TestCases `
   @{Line = "addx 2"; Expected = @{Instruction = "addx"; Value = 2}},
   @{Line = "addx -2"; Expected = @{Instruction = "addx"; Value = -2}},
-  @{Line = "addx -24"; Expected = @{Instruction = "addx"; Value = -24}},
-  @{Line = "noop"; Expected = @{Instruction = "noop"; Value = $null}} {
+  @{Line = "addx -24"; Expected = @{Instruction = "addx"; Value = -24}} {
     param (
       $Line,
       $Expected
     )
     $instruction = ParseInstruction $Line
-    $instruction.Instruction | Should -be $Expected.Instruction
+    $instruction.GetType().Name | Should -Be "AddX"
     $instruction.Value | Should -be $Expected.Value
+  }
+}
+
+Describe "ParseInstruction" {
+  It "Should parse noop line and return instruction" `
+  -TestCases `
+  @{Line = "noop"} {
+    param (
+      $Line
+    )
+    $instruction = ParseInstruction $Line
+    $instruction.GetType().Name | Should -Be "noop"
   }
 }
 
@@ -200,6 +213,9 @@ Describe "[CPU]::AddX" {
   @{CycleToCheck = @(,20); Expected = 420},
   @{CycleToCheck = @(,60); Expected = 1140},
   @{CycleToCheck = @(,100); Expected = 1800},
+  @{CycleToCheck = @(,140); Expected = 2940},
+  @{CycleToCheck = @(,180); Expected = 2880},
+  @{CycleToCheck = @(,220); Expected = 3960},
   @{CycleToCheck = @(20,60); Expected = 1560} {
     param (
       $CycleToCheck,
@@ -209,6 +225,31 @@ Describe "[CPU]::AddX" {
     $cpu = RunInstructionsOnCPU $inputText $CycleToCheck
     $cpu.CyclesToCheck.Count | Should -be 0
     ($cpu.CycleStrengths | Measure-Object -Sum).Sum | Should -be $Expected  
+  }
+}
+
+Describe "GetSpriteFromRegistry" {
+  It "Should return the sprite based on the registry value" `
+  -TestCases `
+  @{Registry = 1; Sprite = @(0, 1, 2)},
+  @{Registry = 5; Sprite = @(4, 5, 6)} {
+    param (
+      $Registry,
+      $Sprite
+    )
+
+    GetSpriteFromRegistry $Registry | Should -be $Sprite
+  }
+}
+
+Describe "SolveDay10PartTwo" {
+  It "Should contain the CRT display after running the program." {
+    SolveDay10PartTwo $inputText | Should -be "##..##..##..##..##..##..##..##..##..##..
+###...###...###...###...###...###...###.
+####....####....####....####....####....
+#####.....#####.....#####.....#####.....
+######......######......######......####
+#######.......#######.......#######....."
   }
 }
 

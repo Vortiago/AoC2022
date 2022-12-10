@@ -1,49 +1,45 @@
 . $PSScriptRoot/../common.ps1
 
 class Rope {
+  $Knots = @()
   $Head
   $Tail
   $Visited = @{}
+
   [void] Move([Direction]$Direction, $Distance) {
     foreach($i in 1..$Distance) {
       switch ($Direction) {
         ([Direction]::Right) {
-            $this.Head.X += 1
-            if ((CalculateDistance $this.Head $this.Tail) -ge 2) {
-              $this.Tail.Y = $this.Head.Y
-              $this.Tail.X += 1
-            }
+          $this.Knots[0].X += 1
         }
         ([Direction]::Up) {
-          $this.Head.Y += 1
-          if ((CalculateDistance $this.Head $this.Tail) -ge 2) {
-            $this.Tail.X = $this.Head.X
-            $this.Tail.Y += 1
-          }
+          $this.Knots[0].Y += 1
         }
         ([Direction]::Left) {
-          $this.Head.X -= 1
-          if ((CalculateDistance $this.Head $this.Tail) -ge 2) {
-            $this.Tail.Y = $this.Head.Y
-            $this.Tail.X -= 1
-          }
+          $this.Knots[0].X -= 1
         }
         ([Direction]::Down) {
-          $this.Head.Y -= 1
-          if ((CalculateDistance $this.Head $this.Tail) -ge 2) {
-            $this.Tail.X = $this.Head.X
-            $this.Tail.Y -= 1
-          }
+          $this.Knots[0].Y -= 1
+        }
+      }
+
+      for($knotIndex = 1; $knotIndex -lt $this.Knots.Count; $knotIndex++) {
+        $previousKnot = $this.Knots[($knotIndex - 1)]
+        $thisKnot = $this.Knots[$knotIndex]
+        if ((CalculateDistance $previousKnot $thisKnot) -ge 2) {
+          $movementX = [Math]::Clamp($previousKnot.X - $thisKnot.X, -1, 1)
+          $movementY = [Math]::Clamp($previousKnot.Y - $thisKnot.Y, -1, 1)
+          $thisKnot.X += $movementX
+          $thisKnot.Y += $movementY
         }
 
-        Default {}
+        if ($thisKnot -eq $this.Knots[-1]) {
+          if ($null -eq $this.Visited[$thisKnot.X]) {
+            $this.Visited[$thisKnot.X] = @{}
+          }
+          $this.Visited[$thisKnot.X][$thisKnot.Y] += 1
+        }
       }
-      
-      if ($null -eq $this.Visited[$this.Tail.X]) {
-        $this.Visited[$this.Tail.X] = @{}
-      }
-
-      $this.Visited[$this.Tail.X][$this.Tail.Y] += 1
     }
   }
 }
@@ -56,10 +52,6 @@ class Knot {
 
   $X
   $Y
-}
-
-class Planks {
-  $VisitedPositions = @{}
 }
 
 enum Direction {
@@ -79,10 +71,13 @@ function ParseDirection($directionText) {
   }
 }
 
-function GetStart {
+function GetStart($numberOfKnots = 2) {
   $rope = [Rope]::new()
-  $rope.Head = [Knot]::new(0, 0)
-  $rope.Tail = [Knot]::new(0 ,0)
+  (1..$numberOfKnots).foreach({
+    $rope.Knots += [Knot]::new(0,0)
+  })
+  $rope.Head = $rope.Knots[0]
+  $rope.Tail = $rope.Knots[-1]
   return $rope
 }
 
@@ -103,6 +98,19 @@ function MoveTroughInput($inputText, $rope) {
 
 function SolveDay9PartOne($inputText) {
   $rope = GetStart
+  MoveTroughInput $inputText $rope
+
+  $count = 0
+  foreach($row in $rope.Visited.Keys) {
+    foreach($column in $rope.Visited[$row].Keys) {
+      $count += 1
+    }
+  }
+  return $count
+}
+
+function SolveDay9PartTwo($inputText) {
+  $rope = GetStart 10
   MoveTroughInput $inputText $rope
 
   $count = 0

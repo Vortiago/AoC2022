@@ -99,6 +99,12 @@ Describe "SolveDay9PartOne" {
   }
 }
 
+Describe "SolveDay9PartTwo" {
+  It "Should calculate visited places" {
+    SolveDay9PartTwo $inputText | Should -be 1
+  }
+}
+
 AfterAll {
   Remove-Module day9
 }
